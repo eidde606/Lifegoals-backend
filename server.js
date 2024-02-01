@@ -46,17 +46,17 @@ app.get("/api/goals", async (req, res) => {
 
 // Delete a goal
 app.delete("/api/goals/:id", async (req, res) => {
-  const { id } = req.params;
+  const goalId = req.params.id;
+  console.log("Server received request to delete goal with id:", goalId); // Add this line
   try {
-    // Use mongoose to find and remove the goal
-    const deletedGoal = await Goal.findByIdAndRemove(id);
-
+    // Use Mongoose to find and delete the goal by ID
+    const deletedGoal = await Goal.findByIdAndDelete(goalId);
     if (!deletedGoal) {
       return res.status(404).json({ error: "Goal not found" });
     }
-
     res.json(deletedGoal);
   } catch (error) {
+    console.error("Error deleting goal:", error); // Add this line
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
