@@ -1,4 +1,4 @@
-// server.js
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -39,6 +39,23 @@ app.get("/api/goals", async (req, res) => {
   try {
     const goals = await Goal.find();
     res.json(goals);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Delete a goal
+app.delete("/api/goals/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Use mongoose to find and remove the goal
+    const deletedGoal = await Goal.findByIdAndRemove(id);
+
+    if (!deletedGoal) {
+      return res.status(404).json({ error: "Goal not found" });
+    }
+
+    res.json(deletedGoal);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
