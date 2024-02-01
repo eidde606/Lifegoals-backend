@@ -5,14 +5,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
-const port = 3001; // You can change the port if needed
 
 // Enable CORS
 app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB (replace 'your-db-uri' with your MongoDB URI)
-mongoose.connect("your-db-uri", {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -45,6 +44,7 @@ app.get("/api/goals", async (req, res) => {
   }
 });
 
+const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
